@@ -1,14 +1,25 @@
 const router = require("express").Router();
+const User = require("../models/User")
+const bcrypt = require("bcrypt")
 
-const User = require("../models/Peg")
+//register
 
-//create a Peg
-
-router.post("/", async (req, res) => {
-    const newPeg = new Peg(req.body);
+router.post("/register", async (req, res) => {
     try {
-        const savedPeg = await newPeg.save()
-        res.status(200).json(savedPeg)
+        //new pass
+        const salt = await bcrypt.genSalt(8);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        //create new user
+        const newUser = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        });
+
+        //save user
+        const user = await newUser.save();
+        res.status(200).json(user.id)
     } catch (err) {
         res.status(500).json(err)
     }
@@ -18,16 +29,6 @@ router.post("/", async (req, res) => {
 
 
 
-//Get all  Pegs
-
-router.get("/", async (req, res) => {
-    try {
-        const Pegs = await Peg.find();
-        res.status(200).json(Pegs)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-});
 
 
 

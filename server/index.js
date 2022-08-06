@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv')
 const app = express();
 const pegRoute = require("./routes/pegs")
+const userRoute = require("./routes/users")
+
+
 
 dotenv.config();
 
@@ -17,6 +20,7 @@ mongoose.connect(process.env.MONGO_URL, {
     })
     .catch((err) => console.log(err))
 
+app.use("/api/users", userRoute)
 app.use("/api/pegs", pegRoute)
 
 app.listen(8080, () => {
