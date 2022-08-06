@@ -20,6 +20,14 @@ router.post("/", async (req, res) => {
 
 //Get all  Pegs
 
+router.get("/", async (req, res) => {
+    try {
+        const Pegs = await Peg.find();
+        res.status(200).json(Pegs)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+});
 
 
 
